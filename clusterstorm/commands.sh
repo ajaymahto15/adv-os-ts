@@ -25,3 +25,26 @@ INSERT INTO customer (name, email) VALUES ('John Doe', 'john.doe@example.com');
 
 # Peer Authentication by default
 # psql -U codespace -d npcibank -W 
+
+CREATE TABLE employees (
+ id SERIAL PRIMARY KEY,
+ name TEXT NOT NULL,
+ skills TEXT[]
+);
+
+INSERT INTO employees (name, skills) VALUES
+('Alice', ARRAY['Python', 'SQL', 'Java']),
+('Bob', ARRAY['JavaScript', 'HTML', 'CSS']);
+
+UPDATE employees
+SET skills = array_append(skills, 'Docker')
+WHERE name = 'Alice';
+
+
+UPDATE employees
+SET skills = array_remove(skills, 'Java')
+WHERE name = 'Alice';
+
+
+SELECT name,skills FROM employees WHERE skills@>ARRAY['Python', 'JavaScript']
+SELECT name,skills FROM employees WHERE ARRAY['Python', 'Docker']<@skills;
