@@ -48,3 +48,34 @@ WHERE name = 'Alice';
 
 SELECT name,skills FROM employees WHERE skills@>ARRAY['Python', 'JavaScript']
 SELECT name,skills FROM employees WHERE ARRAY['Python', 'Docker']<@skills;
+
+
+
+
+## === HSTORE
+CREATE EXTENSION IF NOT EXISTS hstore;
+
+CREATE TABLE products (
+ id SERIAL PRIMARY KEY,
+ name TEXT NOT NULL,
+ attributes HSTORE
+);
+
+\d products; -- DESCRIBE TABLE
+
+INSERT INTO products (name, attributes) VALUES
+('Laptop', 'processor => "Intel i5", ram => "8GB", storage => "512GB SSD"'),
+('Smartphone', 'processor => "Snapdragon 888", ram => "6GB", storage => "128GB"'),
+('Tablet', 'processor => "A12 Bionic", ram => "4GB", storage => "64GB"');
+
+
+
+UPDATE products
+SET attributes = attributes || 'battery_life => "10 hours"'
+WHERE name = 'Laptop';
+
+SELECT name, attributes
+FROM products
+WHERE attributes->'processor' = 'Intel i5';
+
+SELECT name, attributes->'ram' FROM products;
