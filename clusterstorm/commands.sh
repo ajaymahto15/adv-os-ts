@@ -79,3 +79,40 @@ FROM products
 WHERE attributes->'processor' = 'Intel i5';
 
 SELECT name, attributes->'ram' FROM products;
+
+
+CREATE TABLE documents (id SERIAL PRIMARY KEY, content JSONB); 
+
+INSERT INTO documents (content) VALUES ('{"title": "Ptutorial", "tags": ["db", "tutorial"]}');
+
+
+
+
+#=== IMDB
+CREATE EXTENSION IF NOT EXISTS hstore;
+
+CREATE TABLE movie (
+    id SERIAL PRIMARY KEY,
+    title TEXT,
+    actors HSTORE,
+    casting JSONB,
+    songs HSTORE,
+    rating FLOAT,
+    YOR INT
+);
+
+INSERT INTO movie (title, rating, YOR) VALUES ('Mufasa', 4.5, 2024);
+
+UPDATE movie SET actors = actors || 'heroine => "Rashmika Madana"' WHERE title = 'Pushpa2';
+
+UPDATE movie SET casting VALUES ('{"director": "Sukumar"}');
+
+UPDATE movie SET songs = 'name => "pushpa_raj", singer => "ABC", lyricist => "Sateesh Palagiri"' WHERE title = 'Pushpa2';
+
+
+UPDATE movie SET songs = songs || 'singer => "XYZ"' WHERE title = 'Pushpa2';
+
+UPDATE movie SET songs = delete(songs, 'singer') WHERE title = 'Pushpa2';
+
+
+UPDATE movie SET songs = 'name => "song2", singer => "ABC", lyricist => "Shiva RV"' WHERE title = 'Pushpa2';
